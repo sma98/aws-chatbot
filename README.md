@@ -10,7 +10,7 @@ To build this project without any errors/issues, the following requirements need
     
 2.  Install the dependencies from the requirements text file from the repository.
 
-Install packages using the below command. Run the below command where the requirements.txt file is present:
+Install packages using the below command. Run the below command where the requirements.txt file is present:  
  `pip install -r requirements.txt`
 
 
