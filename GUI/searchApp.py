@@ -1,6 +1,8 @@
 import streamlit as st
-from elasticsearch import Elasticsearch, ElasticsearchException
+from elasticsearch import Elasticsearch
+from elasticsearch.exceptions import ElasticsearchException
 from sentence_transformers import SentenceTransformer
+
 
 indexName = "all_pattern"
 
