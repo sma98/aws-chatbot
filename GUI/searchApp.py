@@ -6,8 +6,8 @@ indexName = "all_pattern"
 
 try:
     es = Elasticsearch(
-    "https://localhost:9200",
-    basic_auth=("elastic", "3TgCUfRLY3o7BXKYpWFs"),
+    "https://indexdataipynb-2fuqwweqh4tjnqxxx32q77.streamlit.app/",
+    basic_auth=("elastic", "YTEJkgvx3NX19njbGyDF40Lo"),
     ca_certs="/home/isurika/downloads/elasticsearch-8.12.0/config/certs/http_ca.crt"
     )
 except ConnectionError as e:
