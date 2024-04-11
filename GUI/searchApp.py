@@ -6,9 +6,9 @@ indexName = "all_pattern"
 
 try:
     es = Elasticsearch(
-    "https://indexdataipynb-2fuqwweqh4tjnqxxx32q77.streamlit.app/",
-    basic_auth=("elastic", "YTEJkgvx3NX19njbGyDF40Lo"),
-    ca_certs="/home/isurika/downloads/elasticsearch-8.12.0/config/certs/http_ca.crt"
+    "https://indexdataipynb-2fuqwweqh4tjnqxxx32q77.streamlit.app//",
+    basic_auth=("elastic", "YTEJkgvx3NX19njbGyDF40Lo")
+   
     )
 except ConnectionError as e:
     print("Connection Error:", e)
