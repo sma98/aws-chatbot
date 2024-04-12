@@ -16,6 +16,17 @@ def connect_to_elasticsearch():
     except Exception as e:
         st.error(f"An error occurred: {e}")
         return None
+    
+# def populate_data():
+#     current_dir = os.path.dirname(__file__)
+#     csv_file_path = os.path.join(current_dir, '..', 'dataset', 'consolidated_data.csv')
+
+# # Load data
+#     df = pd.read_csv(csv_file_path).loc[:1500]
+#     df.head()
+
+
+
 
 def search(es, input_keyword):
     if es is None:
@@ -25,7 +36,7 @@ def search(es, input_keyword):
         vector_of_input_keyword = model.encode(input_keyword)
 
         query = {
-            "field": "DescriptionVector",
+            "field": "ResponseVector",
             "query_vector": vector_of_input_keyword,
             "k": 1,  # Set k to 1 to get only the top result
             "num_candidates": 1500,
