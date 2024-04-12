@@ -83,16 +83,17 @@ def search(es, input_keyword):
 
         query = {
             "query": {
-                "knn": {
-                    "field": "ResponseVector",
-                    "query_vector": vector_of_input_keyword,
-                    "k": 1,  # Set k to 1 to get only the top result
-                    "num_candidates": 1500,
+                "script_score": {
+                    "query": {"match_all": {}},
+                    "script": {
+                        "source": "cosineSimilarity(params.query_vector, 'ResponseVector') + 1.0",
+                        "params": {"query_vector": vector_of_input_keyword}
+                    }
                 }
             }
         }
 
-        res = es.search(index="all_patterns_1500", body=query)
+        res = es.search(index="all_patterns_1500", body=query, size=1)  # Adjust size as needed
         results = res["hits"]["hits"]
         return results
     except Exception as e:
