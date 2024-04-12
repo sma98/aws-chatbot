@@ -2,6 +2,7 @@ import streamlit as st
 from elasticsearch import Elasticsearch
 from sentence_transformers import SentenceTransformer
 import os
+import pandas as pd
 
 
 def connect_to_elasticsearch():
