@@ -38,11 +38,18 @@ def search(es, input_keyword):
 
         query = {
             "query": {
-                "knn": {
-                    "field": "ResponseVector",
-                    "query_vector": vector_of_input_keyword,
-                    "k": 1,  # Set k to 1 to get only the top result
-                    "num_candidates": 1500,
+                "script_score": {
+                    "query": {"match_all": {}},
+                    "script": {
+                        "source": "knn_score",
+                        "lang": "knn",
+                        "params": {
+                            "field": "ResponseVector",
+                            "query_vector": vector_of_input_keyword,
+                            "k": 3,
+                            "num_candidates": 1500
+                        }
+                    }
                 }
             }
         }
