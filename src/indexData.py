@@ -25,8 +25,11 @@ es.ping()
 
 
 import pandas as pd
+current_dir = os.path.dirname(__file__)
+csv_file_path = os.path.join(current_dir, '..', 'dataset', 'consolidated_data.csv')
 
-df = pd.read_csv("../dataset/consolidated_data.csv").loc[:1500]
+# Load data
+df = pd.read_csv(csv_file_path).loc[:1500]
 df.head()
 
 
