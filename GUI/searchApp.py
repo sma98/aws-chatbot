@@ -20,40 +20,34 @@ def connect_to_elasticsearch():
         st.error(f"An error occurred: {e}")
         return None
     
-def populate_data():
-    current_dir = os.path.dirname(__file__)
-    csv_file_path = os.path.join(current_dir, '..', 'dataset', 'consolidated_data.csv')
+def populate_data(es):
+    # Check if the index already exists to prevent re-populating data
+    if not es.indices.exists(index="all_patterns_v1"):
+        current_dir = os.path.dirname(__file__)
+        csv_file_path = os.path.join(current_dir, '..', 'dataset', 'consolidated_data.csv')
 
-# Load data
-    df = pd.read_csv(csv_file_path).loc[:1500]
-    df.head()
-    df.isna().value_counts()
+        # Load data
+        df = pd.read_csv(csv_file_path).loc[:1500]
+        df.isna().value_counts()
+        df.fillna("None", inplace=True)
+
+        model = SentenceTransformer('all-mpnet-base-v2')
+        df["ResponseVector"] = df["response"].apply(lambda x: model.encode(x))
     
-    df.fillna("None", inplace=True)
-
-    from sentence_transformers import SentenceTransformer
-    model = SentenceTransformer('all-mpnet-base-v2')
-
-    df["ResponseVector"] = df["response"].apply(lambda x: model.encode(x))
+        from indexMapping import indexMapping
+        try:
+             es.indices.create(index="all_patterns_v1", mappings=indexMapping) 
+        except Exception as e:
+          st.error(f"Failed to create index: {e}")
     
-    from indexMapping import indexMapping
-    try:
-         es.indices.create(index="all_patterns_v1", mappings=indexMapping) 
+        record_list = df.to_dict("records")
+        for record in record_list:
+            try:
+                es.index(index="all_patterns_1500", document=record, id=record["id"])
+            except Exception as e:
+                st.error(f"Failed to index document: {e}")
 
-    except Exception as e:
-      pass
-    
-    record_list = df.to_dict("records")
-
-    for record in record_list:
-     try:
-        es.index(index="all_patterns_1500", document=record, id=record["id"])
-     except Exception as e:
-        print(e)
-
-    es.count(index="all_patterns_1500")    
-          
-
+        st.success(f"Data populated to Elasticsearch index 'all_patterns_1500'.")
 
 
 
@@ -105,9 +99,10 @@ def search(es, input_keyword):
 
 def main():
     st.title("Search Q and A")
-    populate_data()
+
 
     es = connect_to_elasticsearch()
+    populate_data(es)
 
     search_query = st.text_input("Enter your search query")
 
