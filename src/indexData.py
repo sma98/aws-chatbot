@@ -5,7 +5,7 @@
 
 
 from elasticsearch import Elasticsearch
-
+import os
 
 # In[30]:
 
@@ -25,7 +25,7 @@ es.ping()
 
 
 import pandas as pd
-import os
+
 
 current_dir = os.path.dirname(__file__)
 csv_file_path = os.path.join(current_dir, '..', 'dataset', 'consolidated_data.csv')
