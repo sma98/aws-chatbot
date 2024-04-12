@@ -82,15 +82,17 @@ def search(es, input_keyword):
         # return results
 
         query = {
-            "field": "ResponseVector",
-            "query_vector": vector_of_input_keyword,
-            "k": 1,  # Set k to 1 to get only the top result
-            "num_candidates": 1500,
+            "query": {
+                "knn": {
+                    "field": "ResponseVector",
+                    "query_vector": vector_of_input_keyword,
+                    "k": 1,  # Set k to 1 to get only the top result
+                    "num_candidates": 1500,
+                }
+            }
         }
 
-        res = es.knn_search(index="all_patterns_1500", 
-                            knn=query, 
-                            source=["pattern", "response"])
+        res = es.search(index="all_patterns_1500", body=query)
         results = res["hits"]["hits"]
         return results
     except Exception as e:
