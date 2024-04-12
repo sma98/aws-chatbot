@@ -1,6 +1,8 @@
 import streamlit as st
 from elasticsearch import Elasticsearch
 from sentence_transformers import SentenceTransformer
+import os
+
 
 def connect_to_elasticsearch():
     try:
@@ -17,13 +19,39 @@ def connect_to_elasticsearch():
         st.error(f"An error occurred: {e}")
         return None
     
-# def populate_data():
-#     current_dir = os.path.dirname(__file__)
-#     csv_file_path = os.path.join(current_dir, '..', 'dataset', 'consolidated_data.csv')
+def populate_data():
+    current_dir = os.path.dirname(__file__)
+    csv_file_path = os.path.join(current_dir, '..', 'dataset', 'consolidated_data.csv')
 
-# # Load data
-#     df = pd.read_csv(csv_file_path).loc[:1500]
-#     df.head()
+# Load data
+    df = pd.read_csv(csv_file_path).loc[:1500]
+    df.head()
+    df.isna().value_counts()
+    
+    df.fillna("None", inplace=True)
+
+    from sentence_transformers import SentenceTransformer
+    model = SentenceTransformer('all-mpnet-base-v2')
+
+    df["ResponseVector"] = df["response"].apply(lambda x: model.encode(x))
+    
+    from indexMapping import indexMapping
+    try:
+         es.indices.create(index="all_patterns_v1", mappings=indexMapping) 
+
+    except Exception as e:
+      pass
+    
+    record_list = df.to_dict("records")
+
+    for record in record_list:
+     try:
+        es.index(index="all_patterns_1500", document=record, id=record["id"])
+     except Exception as e:
+        print(e)
+
+    es.count(index="all_patterns_1500")    
+          
 
 
 
@@ -76,6 +104,7 @@ def search(es, input_keyword):
 
 def main():
     st.title("Search Q and A")
+    populate_data()
 
     es = connect_to_elasticsearch()
 
