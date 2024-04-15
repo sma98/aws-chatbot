@@ -101,7 +101,7 @@ def search(es, input_keyword):
         return []
 
 def main():
-    st.title("Search Q and A")
+    st.title("AI-Based Chatbot for AWS")
 
 
     es = connect_to_elasticsearch()
