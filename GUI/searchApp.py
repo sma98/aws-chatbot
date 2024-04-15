@@ -117,8 +117,8 @@ def main():
             for result in results:
                 with st.container():
                     try:
-                        st.write(f"Pattern: {result['_source']['pattern']}")
-                        st.write(f"Response: {result['_source']['response']}")
+                        st.header(f"ID: {result['_source']['id']}")
+                        st.write(f"Pattern: {result['_source']['response']}")
                                         
                 except Exception as e:
                     except Exception as e:
