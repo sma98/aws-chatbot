@@ -117,8 +117,10 @@ def main():
             for result in results:
                 with st.container():
                     try:
-                        st.header(f"ID: {result['_source']}")
-                        st.write(f"Pattern: {result['_source']['response']}")
+                        st.write(f"Pattern: {result['_source']['pattern']}")
+                        st.write(f"Response: {result['_source']['response']}")
+                                        
+                except Exception as e:
                     except Exception as e:
                         st.error(f"Error displaying result: {e}")
                     st.divider()
