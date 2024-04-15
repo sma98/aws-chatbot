@@ -119,8 +119,6 @@ def main():
                     try:
                         st.header(f"ID: {result['_source']['id']}")
                         st.write(f"Pattern: {result['_source']['response']}")
-                                        
-                except Exception as e:
                     except Exception as e:
                         st.error(f"Error displaying result: {e}")
                     st.divider()
